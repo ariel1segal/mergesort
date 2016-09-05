@@ -1,0 +1,98 @@
+Merge Sort Algorithm in C. 
+--------------------------
+This program demonstrates merge sort of an array of unsigned integers. This C 
+code is written with the mindset of OOP, and features objects, constructor/destructor, 
+separation of data and algorithm.
+The program essentially runs unit tests and black box tests of the algorithm.
+
+Build and Run
+-------------
+1. clone the project
+2. cd <project directory>
+3. go to the source directory:
+   cd src
+4. make
+5. the execution file 'sort' is in the binary directory
+   cd ../bin
+6. ./sort
+
+Description
+-----------
+Implementation of the merge sort is written in C in OOP fashion. The following
+is an introduction to the code. After reading this, it will be easy to read the
+code and understand it. The source code is well commented.
+* Object
+typedef struct
+{
+	unsigned size;				// Length of list.
+	unsigned *ar;					// pointer to an unsigned int array.
+} list_t;
+
+* Compare Function - Pointer to function type
+
+typedef compare_t (*compareFunction_t)(unsigned, unsigned);
+
+The user provides the compare function, to gain more flexibility. The tests give
+two examples of compare functions, one for ascending order sort, and the other for
+descending order sort.
+The compare function returns a value of compare_t type, to make the compare 
+function more general. Subtracting two elements will not give a direct indicator of
+which one is bigger in the case of sorting unsigned integers, as it will do for 
+signed integers. The compare function returns three values, left element bigger, 
+right element bigger, and both are equal.
+The criteria which to return one of these values is determined in the implementation of the 
+compare function
+
+The return type:
+typedef enum
+{
+	Tie_e
+	, LeftWins_e
+	, RightWins_e
+} compare_t;
+
+This is also a preparation for modifying the code to support sorting of arrays 
+of other types.
+
+* constructors
+Creates a new list from an array of unsigned integers. This function allocates 
+memory for the object of type list_t and for the array, and copies the array.
+This function does not change the original array accepted as parameter.
+
+list_t *CreateList(unsigned size, unsigned ar[]);
+
+Creates a new empty list. This function gets the size and allocates memory for 
+an array of unsigned integers. The memory is not initialized.
+
+list_t *CreateEmptyList(unsigned size);
+
+Clones a list_t object.
+
+list_t *CloneList(list_t *orig);
+
+* destructor
+First frees the memory allocated to the array, and then releases the object.
+
+void DestroyList(list_t **list);
+
+* The Merge Function 
+Implementation the merge sort algorithm
+
+list_t *MergeSort(list_t *list, compareFunction_t compare);
+
+* Helper Functions
+Splits the list into two new objects. Does not free the original list.
+
+void SplitList(list_t *orig, list_t **left, list_t **right);
+
+Creates a new object by merging two objects. Does not free memory.
+
+void MergeLists(list_t **merged, list_t *left, list_t *right, compareFunction_t compare);
+
+* Compare Functions
+Two compare functions, one will make the sort algorithm sort the list in descending 
+order, and the other in ascending order.
+
+compare_t DescendingOrder(unsigned left, unsigned right);
+compare_t AscendingOrder(unsigned left, unsigned right);
+
